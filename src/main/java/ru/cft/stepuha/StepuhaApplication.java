@@ -1,13 +1,13 @@
-package ru.cft.yellowrubberduck;
+package ru.cft.stepuha;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class YellowRubberDuckApplication {
+public class StepuhaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(YellowRubberDuckApplication.class, args);
+		SpringApplication.run(StepuhaApplication.class, args);
 	}
 
 }
