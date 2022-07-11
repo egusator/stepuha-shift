@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import ru.cft.stepuha.repository.PersonRepository;
 import ru.cft.stepuha.repository.model.PersonEntity;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -22,5 +23,32 @@ public class PersonRepositoryImpl implements PersonRepository {
     @Override
     public List<PersonEntity> selectAllPerson () {
         return jdbcTemplate.query("Select * from person;", rowMapper);
+    }
+    @Override
+    public void insertPerson(String firstName,
+                             String lastName,
+                             String middleName,
+                             BigDecimal money,
+                             String login) {
+        jdbcTemplate.update("insert into person(first_name, " +
+                                    "last_name, " +
+                                    "middle_name," +
+                                    " money, " +
+                                    "login)" +
+                                    "values (?, ?, ?, ?, ?);", firstName, lastName, middleName, money, login);
+    }
+
+    @Override
+    public void addMoneyToPersonById(long id, BigDecimal moneyAmount) {
+        jdbcTemplate.update("update person set money = " +
+                "(select money from person where id = " +
+                 id + ") + ? where id = ?", moneyAmount, id);
+    }
+
+    @Override
+    public void takeMoneyFromPersonById(long id, BigDecimal moneyAmount) {
+        jdbcTemplate.update("update person set money = " +
+                "(select money from person where id = " +
+                id + ") - ? where id = ?", moneyAmount, id);
     }
 }

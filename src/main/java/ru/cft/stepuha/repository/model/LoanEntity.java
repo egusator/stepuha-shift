@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.math.BigDecimal;
 
 public class LoanEntity {
-    public enum State {
+ /*   public enum State {
         STARTED(1),
         BORROWED(2),
         LENDED(3);
@@ -21,7 +21,7 @@ public class LoanEntity {
         }
 
     }
-
+*/
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id")
@@ -34,7 +34,7 @@ public class LoanEntity {
     private long lenderId;
 
     @Column(name="state", nullable = false)
-    private State state;
+    private int state;
 
     @Column(name="money", nullable = false)
     private BigDecimal money;
@@ -49,7 +49,7 @@ public class LoanEntity {
     @Column(name="refunding_time", nullable = true)
     private long refundingTime;
 
-    public LoanEntity(long id, long borrowerId, long lenderId, State state,
+    public LoanEntity(long id, long borrowerId, long lenderId, int state,
                       BigDecimal money, long creationTime, long lendingTime,
                       long refundingTime) {
         this.id = id;
@@ -88,11 +88,11 @@ public class LoanEntity {
         this.lenderId = lenderId;
     }
 
-    public State getState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(State state) {
+    public void setState(int state) {
         this.state = state;
     }
 
