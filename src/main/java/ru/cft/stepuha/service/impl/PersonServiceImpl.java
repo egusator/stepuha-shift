@@ -3,11 +3,9 @@ package ru.cft.stepuha.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.cft.stepuha.repository.PersonRepository;
-import ru.cft.stepuha.repository.model.PersonEntity;
 import ru.cft.stepuha.service.PersonService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 
 
 @Service
@@ -21,7 +19,22 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<PersonEntity> getAllPerson() {
-        return personRepository.selectAllPerson();
+    public void createPerson(String firstName,
+                             String lastName,
+                             String middleName,
+                             BigDecimal money,
+                             String login) {
+        personRepository.insertPerson(firstName, lastName, middleName, money, login);
     }
+
+    @Override
+    public void addMoneyToPerson(long id, BigDecimal moneyAmount) {
+        personRepository.addMoneyToPersonById(id, moneyAmount);
+    }
+
+    @Override
+    public void takeMoneyFromPerson (long id, BigDecimal moneyAmount) {
+        personRepository.takeMoneyFromPersonById(id, moneyAmount);
+    }
+
 }
