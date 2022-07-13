@@ -62,4 +62,9 @@ public class LoanServiceImpl implements LoanService {
         personRepository.addMoneyToPersonById(lenderId, moneyAmount);
         loanRepository.refundMoneyByLoanId(loanId);
     }
+
+    @Override
+    public List<LoanEntity> getLoanRequestsOfUser(long userId) {
+        return loanRepository.getLoanRequestsByUserId(userId);
+    }
 }

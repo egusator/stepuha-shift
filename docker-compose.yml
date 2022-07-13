@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: yrd-postgres
+    image: postgres:12.1-alpine
+    ports:
+      - 5434:5434
+    environment:
+      POSTGRES_DB: stepuha
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+
+networks:
+  default:
+    name: test-network
+    driver: bridge

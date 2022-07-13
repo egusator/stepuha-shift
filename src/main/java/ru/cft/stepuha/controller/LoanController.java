@@ -45,7 +45,11 @@ public class LoanController {
         return loanService.getPromisedLoans(lenderId);
     }
 
-    @GetMapping("")
+
+    @GetMapping("requestsOfUser")
+    public List<LoanEntity> getLoanRequestsOfUser(@RequestParam long userId) {
+        return loanService.getLoanRequestsOfUser(userId);
+    }
     @PostMapping("refund")
     public void refundMoney(@RequestParam long loanId){
         loanService.refundMoney(loanId);

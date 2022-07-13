@@ -16,4 +16,6 @@ public interface LoanRepository {
 
     public  List<LoanEntity> getPromisedLoansByLenderId (long lenderId);
     public LoanEntity getLoanById(long loanId);
+
+    List<LoanEntity> getLoanRequestsByUserId(long userId);
 }
