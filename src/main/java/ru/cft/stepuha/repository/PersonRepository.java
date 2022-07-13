@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public interface PersonRepository {
-    public List<PersonEntity> selectAllPerson();
+    public PersonEntity getPersonById(long personId);
     public void insertPerson(String firstName,
                              String lastName,
                              String middleName,

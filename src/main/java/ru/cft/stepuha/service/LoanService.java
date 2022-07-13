@@ -1,6 +1,7 @@
 package ru.cft.stepuha.service;
 
 import ru.cft.stepuha.repository.model.LoanEntity;
+import ru.cft.stepuha.service.exceptions.NotEnoughMoneyException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,13 +19,13 @@ public interface LoanService {
     public List<LoanEntity> getLoansForRefunding(long borrowerId);
 
     //ответить на чужую заявку на займ и дать денег
-    public void lendMoney(long lenderId, long loanId);
+    public void lendMoney(long lenderId, long loanId) throws NotEnoughMoneyException;
 
     //получить список тех займов, по которым тебе должны
     public List<LoanEntity> getPromisedLoans(long lenderId);
 
     //вернуть деньги по займу
-    public void refundMoney(long loanId);
+    public void refundMoney(long loanId) throws NotEnoughMoneyException;
 
     //посмотреть свои заявки на займ
     List<LoanEntity> getLoanRequestsOfUser(long userId);

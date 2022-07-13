@@ -7,6 +7,7 @@ import ru.cft.stepuha.repository.PersonRepository;
 import ru.cft.stepuha.repository.model.LoanEntity;
 
 import ru.cft.stepuha.service.LoanService;
+import ru.cft.stepuha.service.exceptions.NotEnoughMoneyException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -43,24 +44,35 @@ public class LoanServiceImpl implements LoanService {
         return loanRepository.getPromisedLoansByLenderId(lenderId);
     }
     @Override
-    public void lendMoney(long lenderId, long loanId) {
+    public void lendMoney(long lenderId, long loanId) throws NotEnoughMoneyException {
         LoanEntity currentLoan = loanRepository.getLoanById(loanId);
         long borrowerId = currentLoan.getBorrowerId();
         BigDecimal moneyAmount = currentLoan.getMoney();
-        personRepository.addMoneyToPersonById(borrowerId, moneyAmount);
-        personRepository.takeMoneyFromPersonById(lenderId, moneyAmount);
-        loanRepository.lendMoneyByLoanId(loanId, lenderId);
+        BigDecimal personBalance = personRepository.getPersonById(lenderId).getMoney();
+        if (personBalance.compareTo(moneyAmount) >= 0) {
+            personRepository.addMoneyToPersonById(borrowerId, moneyAmount);
+            personRepository.takeMoneyFromPersonById(lenderId, moneyAmount);
+            loanRepository.lendMoneyByLoanId(loanId, lenderId);
+        } else {
+            throw new NotEnoughMoneyException();
+        }
     }
 
     @Override
-    public void refundMoney(long loanId) {
+    public void refundMoney(long loanId) throws NotEnoughMoneyException {
+
         LoanEntity currentLoan = loanRepository.getLoanById(loanId);
         long lenderId = currentLoan.getLenderId();
         long borrowerId = currentLoan.getBorrowerId();
         BigDecimal moneyAmount = currentLoan.getMoney();
-        personRepository.takeMoneyFromPersonById(borrowerId, moneyAmount);
-        personRepository.addMoneyToPersonById(lenderId, moneyAmount);
-        loanRepository.refundMoneyByLoanId(loanId);
+        BigDecimal personBalance = personRepository.getPersonById(borrowerId).getMoney();
+        if (personBalance.compareTo(moneyAmount) >= 0) {
+            personRepository.takeMoneyFromPersonById(borrowerId, moneyAmount);
+            personRepository.addMoneyToPersonById(lenderId, moneyAmount);
+            loanRepository.refundMoneyByLoanId(loanId);
+        } else {
+            throw new NotEnoughMoneyException();
+        }
     }
 
     @Override
