@@ -7,12 +7,15 @@ import java.util.List;
 
 public interface PersonService {
 
+    //добавить нового пользователя в бд
     public void createPerson(String firstName,
                              String lastName,
                              String middleName,
                              BigDecimal money,
                              String login);
+    //дать денег пользователю
     public void addMoneyToPerson(long id, BigDecimal moneyAmount);
 
+    //взять деньги у пользователя
     public void takeMoneyFromPerson(long id, BigDecimal moneyAmount);
 }

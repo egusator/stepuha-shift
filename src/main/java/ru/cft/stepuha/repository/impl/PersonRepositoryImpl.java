@@ -20,10 +20,7 @@ public class PersonRepositoryImpl implements PersonRepository {
         this.jdbcTemplate = jdbcTemplate;
         this.rowMapper = rowMapper;
     }
-    @Override
-    public List<PersonEntity> selectAllPerson () {
-        return jdbcTemplate.query("Select * from person;", rowMapper);
-    }
+
     @Override
     public void insertPerson(String firstName,
                              String lastName,
@@ -50,5 +47,10 @@ public class PersonRepositoryImpl implements PersonRepository {
         jdbcTemplate.update("update person set money = " +
                 "(select money from person where id = " +
                 id + ") - ? where id = ?", moneyAmount, id);
+    }
+
+    @Override
+    public PersonEntity getPersonById(long personId) {
+        return jdbcTemplate.query("select * from person where id = " + personId+";", rowMapper).get(0);
     }
 }

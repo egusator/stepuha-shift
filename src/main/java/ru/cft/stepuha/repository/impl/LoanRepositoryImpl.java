@@ -53,9 +53,14 @@ public class LoanRepositoryImpl implements LoanRepository {
     public LoanEntity getLoanById(long loanId) {
         return jdbcTemplate.query("select * from loan where id = "+loanId+";",rowMapper).get(0);
     }
+    @Override
     public void refundMoneyByLoanId(long loanId){
         jdbcTemplate.update("update loan set state = 3, refunding_time = ? where id = ?",
                                                 System.currentTimeMillis() / 1000, loanId);
     }
 
+    @Override
+    public List<LoanEntity> getLoanRequestsByUserId(long userId) {
+        return jdbcTemplate.query("select * from loan where state = 1 and borrower_id = " + userId +";", rowMapper);
+    }
 }
