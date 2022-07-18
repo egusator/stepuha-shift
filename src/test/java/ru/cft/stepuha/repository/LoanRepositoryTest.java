@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.springframework.jdbc.core.RowMapper;
@@ -24,18 +26,17 @@ import java.math.BigDecimal;
 import java.util.List;
 
 
-@DataJdbcTest
+@SpringBootTest
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LoanRepositoryTest {
+    @Autowired
     private JdbcTemplate jdbcTemplate;
-    private LoanRepositoryImpl loanRepository;
-    public RowMapper<LoanEntity> rowMapper = new LoanEntityRowMapper();
+    @Autowired
+    private LoanRepository loanRepository;
 
     @Autowired
-    public LoanRepositoryTest(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.loanRepository = new LoanRepositoryImpl(jdbcTemplate, rowMapper);
-    }
+    private RowMapper<LoanEntity> rowMapper;
 
     @BeforeAll
     public void initTables() {
@@ -93,11 +94,6 @@ public class LoanRepositoryTest {
                 "(3, 1, 2, 250, ?, ?)", System.currentTimeMillis()/1000 - 600, System.currentTimeMillis()/1000 );
     }
 
-    /*
-
-    public void refundMoneyByLoanId(long loanId);
-
-    */
 
     @Test
     public void getLoanById_ShouldReturnLoanById() {
@@ -114,6 +110,12 @@ public class LoanRepositoryTest {
         Assert.assertEquals(3, loanList.get(1).getId());
     }
 
+    @Test
+    public void loanExists_shouldReturnTrueIfLoanExists_EitherFalse () {
+        Assert.assertTrue(loanRepository.loanExists(1));
+        Assert.assertTrue(loanRepository.loanExists(6));
+        Assert.assertFalse(loanRepository.loanExists(7));
+    }
     @Test
     public void createLoan_ShouldInsertNewLoan() {
         loanRepository.createLoan(1, BigDecimal.valueOf(1000));

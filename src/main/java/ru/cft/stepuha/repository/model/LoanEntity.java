@@ -7,51 +7,27 @@ import javax.persistence.Id;
 import java.math.BigDecimal;
 
 public class LoanEntity {
- /*   public enum State {
-        STARTED(1),
-        BORROWED(2),
-        LENDED(3);
-        private int value;
-        State(int newValue) {
-            value = newValue;
-        }
+ 
 
-        public int getValue() {
-            return value;
-        }
+    private Long id;
 
-    }
-*/
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="id")
-    private long id;
+    private Long borrowerId;
 
-    @Column(name="borrower_id", nullable = false)
-    private long borrowerId;
+    private Long lenderId;
 
-    @Column(name="lender_id", nullable = true)
-    private long lenderId;
+    private Integer state;
 
-    @Column(name="state", nullable = false)
-    private int state;
-
-    @Column(name="money", nullable = false)
     private BigDecimal money;
 
-    @Column(name="creation_time", nullable = false)
-    private long creationTime;
+    private Long creationTime;
 
-    @Column(name="lending_time", nullable = true)
-    private long lendingTime;
+    private Long lendingTime;
 
+    private Long refundingTime;
 
-    @Column(name="refunding_time", nullable = true)
-    private long refundingTime;
-
-    public LoanEntity(long id, long borrowerId, long lenderId, int state,
-                      BigDecimal money, long creationTime, long lendingTime,
-                      long refundingTime) {
+    public LoanEntity(Long id, Long borrowerId, Long lenderId, Integer state,
+                      BigDecimal money, Long creationTime, Long lendingTime,
+                      Long refundingTime) {
         this.id = id;
         this.borrowerId = borrowerId;
         this.lenderId = lenderId;
@@ -68,7 +44,7 @@ public class LoanEntity {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -76,7 +52,7 @@ public class LoanEntity {
         return borrowerId;
     }
 
-    public void setBorrowerId(long borrowerId) {
+    public void setBorrowerId(Long borrowerId) {
         this.borrowerId = borrowerId;
     }
 
@@ -84,7 +60,7 @@ public class LoanEntity {
         return lenderId;
     }
 
-    public void setLenderId(long lenderId) {
+    public void setLenderId(Long lenderId) {
         this.lenderId = lenderId;
     }
 
@@ -92,7 +68,7 @@ public class LoanEntity {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 
@@ -108,7 +84,7 @@ public class LoanEntity {
         return creationTime;
     }
 
-    public void setCreationTime(long creationTime) {
+    public void setCreationTime(Long creationTime) {
         this.creationTime = creationTime;
     }
 
@@ -116,7 +92,7 @@ public class LoanEntity {
         return lendingTime;
     }
 
-    public void setLendingTime(long lendingTime) {
+    public void setLendingTime(Long lendingTime) {
         this.lendingTime = lendingTime;
     }
 
@@ -124,7 +100,7 @@ public class LoanEntity {
         return refundingTime;
     }
 
-    public void setRefundingTime(long refundingTime) {
+    public void setRefundingTime(Long refundingTime) {
         this.refundingTime = refundingTime;
     }
 

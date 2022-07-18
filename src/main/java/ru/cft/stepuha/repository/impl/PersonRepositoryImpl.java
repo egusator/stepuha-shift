@@ -53,4 +53,9 @@ public class PersonRepositoryImpl implements PersonRepository {
     public PersonEntity getPersonById(long personId) {
         return jdbcTemplate.query("select * from person where id = " + personId+";", rowMapper).get(0);
     }
+
+    @Override
+    public boolean personExists(long id) {
+        return jdbcTemplate.query("select * from person where id = " + id, rowMapper).size() > 0;
+    }
 }

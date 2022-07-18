@@ -4,28 +4,23 @@ package ru.cft.stepuha.repository.model;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "person")
 public class PersonEntity {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id")
-    private long id;
 
-    @Column(name = "first_name", nullable = false)
+    private Long id;
+
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+
     private String lastName;
 
-    @Column(name = "middle_name", nullable = true)
+
     private String middleName;
 
-    @Column(name = "login", nullable = false)
+
     private String login;
 
-    @Column(name = "money", nullable = false)
+
     private BigDecimal money;
 
     public PersonEntity(long id, String firstName, String lastName, String middleName, String login, BigDecimal money) {
@@ -45,7 +40,7 @@ public class PersonEntity {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

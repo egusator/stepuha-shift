@@ -28,9 +28,15 @@ public class LoanRepositoryImpl implements LoanRepository {
     }
 
     @Override
+    public boolean loanExists(long loanId) {
+        return jdbcTemplate.query("select * from loan where id = " + loanId, rowMapper).size() > 0;
+    }
+
+    @Override
     public List<LoanEntity> getLoansForLendingById(long lenderId) {
         return jdbcTemplate.query("select * from loan where borrower_id != "+lenderId+" and state = 1;",rowMapper);
     }
+
 
     @Override
     public List<LoanEntity> getLoansForRefundingById (long borrowerId) {

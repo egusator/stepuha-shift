@@ -9,28 +9,28 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import ru.cft.stepuha.repository.impl.PersonRepositoryImpl;
 import ru.cft.stepuha.repository.mapper.PersonEntityRowMapper;
+import ru.cft.stepuha.repository.model.LoanEntity;
 import ru.cft.stepuha.repository.model.PersonEntity;
 
 import java.math.BigDecimal;
 
 
-@DataJdbcTest
+@SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PersonRepositoryTest {
+    @Autowired
     private JdbcTemplate jdbcTemplate;
-    private PersonRepositoryImpl personRepository;
-    private RowMapper<PersonEntity> rowMapper;
+    @Autowired
+    private PersonRepository personRepository;
 
     @Autowired
-    public PersonRepositoryTest(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.personRepository = new PersonRepositoryImpl(jdbcTemplate, new PersonEntityRowMapper());
-    }
+    private RowMapper<PersonEntity> rowMapper;
 
     @BeforeAll
     public void initTables() {
@@ -76,7 +76,11 @@ public class PersonRepositoryTest {
         Assert.assertEquals(new BigDecimal(3000), person.getMoney());
     }
 
-
+    @Test
+    public void personExists_ShouldReturnTrueIfPersonFoundEitherFalse() {
+        Assert.assertEquals(true,personRepository.personExists(2));
+        Assert.assertEquals(false,personRepository.personExists(3));
+    }
     @Test
     public void takeMoneyToPersonById_shouldUpdateMoneyOfPersonById() {
         personRepository.takeMoneyFromPersonById(1, BigDecimal.valueOf(500));

@@ -14,6 +14,7 @@ public interface LoanRepository {
 
     public void refundMoneyByLoanId(long loanId);
 
+    public boolean loanExists (long loanId);
     public  List<LoanEntity> getPromisedLoansByLenderId (long lenderId);
     public LoanEntity getLoanById(long loanId);
 

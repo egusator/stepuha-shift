@@ -15,4 +15,6 @@ public interface PersonRepository {
                              String login);
     public void addMoneyToPersonById(long id, BigDecimal moneyAmount);
     public void takeMoneyFromPersonById(long id, BigDecimal moneyAmount);
+
+    public boolean personExists (long id);
 }
