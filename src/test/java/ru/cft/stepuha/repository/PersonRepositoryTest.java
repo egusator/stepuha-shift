@@ -7,15 +7,13 @@ import org.junit.jupiter.api.*;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import ru.cft.stepuha.repository.impl.PersonRepositoryImpl;
-import ru.cft.stepuha.repository.mapper.PersonEntityRowMapper;
-import ru.cft.stepuha.repository.model.LoanEntity;
+
 import ru.cft.stepuha.repository.model.PersonEntity;
 
 import java.math.BigDecimal;

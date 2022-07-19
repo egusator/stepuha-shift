@@ -7,9 +7,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.cft.stepuha.repository.PersonRepository;
 import ru.cft.stepuha.repository.model.PersonEntity;
-
 import java.math.BigDecimal;
-import java.util.List;
+
 
 @Repository
 public class PersonRepositoryImpl implements PersonRepository {
@@ -27,35 +26,54 @@ public class PersonRepositoryImpl implements PersonRepository {
                              String middleName,
                              BigDecimal money,
                              String login) {
-        jdbcTemplate.update("insert into person(first_name, " +
-                                    "last_name, " +
-                                    "middle_name," +
-                                    " money, " +
-                                    "login)" +
-                                    "values (?, ?, ?, ?, ?);", firstName, lastName, middleName, money, login);
+        final String sql = "insert into person(first_name, last_name, middle_name, money, login) values (?, ?, ?, ?, ?);";
+        jdbcTemplate.update(sql, preparedStatement -> {
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setString(3, middleName);
+            preparedStatement.setBigDecimal(4,  money);
+            preparedStatement.setString(5, login);
+        });
     }
+
 
     @Override
     public void addMoneyToPersonById(long id, BigDecimal moneyAmount) {
-        jdbcTemplate.update("update person set money = " +
-                "(select money from person where id = " +
-                 id + ") + ? where id = ?", moneyAmount, id);
+        final String sql ="update person set money = ((select money from person where id = ?) + ?) where id = ?;";
+        jdbcTemplate.update(sql, preparedStatement -> {
+            preparedStatement.setLong(1, id);
+            preparedStatement.setBigDecimal(2, moneyAmount);
+            preparedStatement.setLong(3, id);
+        });
     }
 
     @Override
     public void takeMoneyFromPersonById(long id, BigDecimal moneyAmount) {
-        jdbcTemplate.update("update person set money = " +
-                "(select money from person where id = " +
-                id + ") - ? where id = ?", moneyAmount, id);
+        final String sql ="update person set money = ((select money from person where id = ?) - ?) where id = ?;";
+        jdbcTemplate.update(sql, preparedStatement -> {
+            preparedStatement.setLong(1, id);
+            preparedStatement.setBigDecimal(2, moneyAmount);
+            preparedStatement.setLong(3, id);
+        });
     }
 
     @Override
     public PersonEntity getPersonById(long personId) {
-        return jdbcTemplate.query("select * from person where id = " + personId+";", rowMapper).get(0);
+        final String sql = "select * from person where id = ?;";
+        return jdbcTemplate.query(sql, preparedStatement -> preparedStatement.setLong(1, personId), rowMapper).get(0);
     }
 
     @Override
     public boolean personExists(long id) {
-        return jdbcTemplate.query("select * from person where id = " + id, rowMapper).size() > 0;
+        final String sql = "select * from person where id = ?;";
+        return jdbcTemplate.query(sql, preparedStatement -> preparedStatement.setLong(1, id), rowMapper).size() > 0;
+    }
+
+    @Override
+    public boolean loginIsUsed(String login) {
+        final String sql = "select * from person where login = ?";
+        return jdbcTemplate.query(sql, preparedStatement -> {
+            preparedStatement.setString(1, login);
+        },rowMapper).size() > 0;
     }
 }

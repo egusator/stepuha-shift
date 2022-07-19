@@ -1,21 +1,20 @@
 package ru.cft.stepuha.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
+
 import static org.mockito.Mockito.*;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import ru.cft.stepuha.repository.LoanRepository;
 import ru.cft.stepuha.repository.PersonRepository;
 import ru.cft.stepuha.repository.model.LoanEntity;
@@ -26,7 +25,7 @@ import ru.cft.stepuha.service.exceptions.UserNotFoundException;
 import ru.cft.stepuha.service.impl.LoanServiceImpl;
 
 import java.math.BigDecimal;
-import java.util.*;
+
 
 @ExtendWith(MockitoExtension.class)
 public class LoanServiceTest {

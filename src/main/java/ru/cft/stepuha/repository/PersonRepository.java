@@ -3,7 +3,7 @@ package ru.cft.stepuha.repository;
 import ru.cft.stepuha.repository.model.PersonEntity;
 
 import java.math.BigDecimal;
-import java.util.List;
+
 
 
 public interface PersonRepository {
@@ -17,4 +17,5 @@ public interface PersonRepository {
     public void takeMoneyFromPersonById(long id, BigDecimal moneyAmount);
 
     public boolean personExists (long id);
+    public boolean loginIsUsed (String login);
 }

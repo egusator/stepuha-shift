@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/loan")
 public class LoanController {
-    private LoanService loanService;
+    private final LoanService loanService;
 
     @Autowired
     public LoanController(LoanService loanService) {
@@ -101,8 +101,16 @@ public class LoanController {
         }
     }
     @PostMapping("lend")
-    public ResponseEntity<?> lendMoney(@RequestParam long lenderId, @RequestParam long loanId) {
+    public ResponseEntity<?> lendMoney(@RequestParam Long lenderId, @RequestParam Long loanId) {
         try {
+            if (lenderId == null || loanId == null) {
+                return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(2000, "Id can not be null")),
+                        HttpStatus.BAD_REQUEST);
+            } else if (lenderId <= 0 || loanId <= 0) {
+                return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(3000, "Id should be positive")),
+                        HttpStatus.BAD_REQUEST);
+            }
+
             loanService.lendMoney(lenderId,loanId);
             return new ResponseEntity<>(new EmptyDTO("OK"), HttpStatus.OK);
         }  catch (NotEnoughMoneyException notEnoughMoneyException) {
@@ -124,8 +132,15 @@ public class LoanController {
     }
 
     @GetMapping("promised")
-    public ResponseEntity<?> getDebtors(@RequestParam long lenderId) {
+    public ResponseEntity<?> getDebtors(@RequestParam Long lenderId) {
         try {
+            if (lenderId == null) {
+                return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(2000, "Id can not be null")),
+                        HttpStatus.BAD_REQUEST);
+            } else if (lenderId <= 0) {
+                return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(3000, "Id should be positive")),
+                        HttpStatus.BAD_REQUEST);
+            }
             List<LoanEntity> result = loanService.getPromisedLoans(lenderId);
             return new ResponseEntity<>(new LoanDTO("OK", result),
                     HttpStatus.OK);
@@ -141,8 +156,15 @@ public class LoanController {
 
 
     @GetMapping("user-requests")
-    public ResponseEntity<?> getLoanRequestsOfUser(@RequestParam long userId) {
+    public ResponseEntity<?> getLoanRequestsOfUser(@RequestParam Long userId) {
         try {
+            if (userId == null) {
+                return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(2000, "Id can not be null")),
+                        HttpStatus.BAD_REQUEST);
+            } else if (userId <= 0) {
+                return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(3000, "Id should be positive")),
+                        HttpStatus.BAD_REQUEST);
+            }
             List<LoanEntity> result = loanService.getLoanRequestsOfUser(userId);
             return new ResponseEntity<>(new LoanDTO("OK", result),
                     HttpStatus.OK);
@@ -155,9 +177,15 @@ public class LoanController {
         }
     }
     @PostMapping("refund")
-    public ResponseEntity<?> refundMoney(@RequestParam long loanId){
-
+    public ResponseEntity<?> refundMoney(@RequestParam Long loanId){
         try {
+            if (loanId == null) {
+                return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(2000, "Id can not be null")),
+                        HttpStatus.BAD_REQUEST);
+            } else if (loanId <= 0) {
+                return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(3000, "Id should be positive")),
+                        HttpStatus.BAD_REQUEST);
+            }
             loanService.refundMoney(loanId);
             return new ResponseEntity<>(new EmptyDTO("OK"), HttpStatus.OK);
         } catch (NotEnoughMoneyException notEnoughMoneyException) {

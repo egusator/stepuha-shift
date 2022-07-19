@@ -1,7 +1,6 @@
 
 package ru.cft.stepuha.repository.model;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 
 public class PersonEntity {

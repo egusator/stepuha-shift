@@ -8,17 +8,12 @@ import org.junit.jupiter.api.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import ru.cft.stepuha.repository.impl.LoanRepositoryImpl;
-
-import ru.cft.stepuha.repository.mapper.LoanEntityRowMapper;
 
 import ru.cft.stepuha.repository.model.LoanEntity;
 
