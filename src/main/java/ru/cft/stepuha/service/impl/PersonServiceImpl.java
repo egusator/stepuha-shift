@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.cft.stepuha.repository.PersonRepository;
+import ru.cft.stepuha.repository.model.PersonEntity;
 import ru.cft.stepuha.service.PersonService;
 import ru.cft.stepuha.service.exceptions.*;
 
@@ -19,6 +20,12 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     public PersonServiceImpl(PersonRepository personRepository) {
         this.personRepository = personRepository;
+    }
+
+    @Override
+    public PersonEntity getPersonById(Long id) {
+        return personRepository.getPersonById(id);
+        //TODO add validation and unit test
     }
 
     @Override
@@ -73,6 +80,17 @@ public class PersonServiceImpl implements PersonService {
     public void addMoneyToPerson(long id, BigDecimal moneyAmount) throws UserNotFoundException{
         if(personRepository.personExists(id)) {
             personRepository.addMoneyToPersonById(id, moneyAmount);
+        } else {
+            throw new UserNotFoundException();
+        }
+    }
+
+    @Override
+    public PersonEntity getPersonByLogin(String login) throws UserNotFoundException {
+
+        if (personRepository.personWithThisLoginExists(login)){
+            PersonEntity person = personRepository.getPersonByLogin(login);
+            return person;
         } else {
             throw new UserNotFoundException();
         }

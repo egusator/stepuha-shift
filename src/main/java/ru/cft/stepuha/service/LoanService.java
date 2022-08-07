@@ -13,6 +13,7 @@ public interface LoanService {
 
     public void createLoanRequest(long borrowerId, BigDecimal moneyAmount) throws UserNotFoundException;
 
+
     public List<LoanEntity> getLoanRequestsFreeForLending(long lenderId)  throws UserNotFoundException;
 
     public List<LoanEntity> getLoansWhichNeedToBeRefunded(long borrowerId) throws UserNotFoundException;

@@ -150,4 +150,19 @@ public class PersonServiceTest {
         verify(personRepository, times(1)).takeMoneyFromPersonById(existingPersonId, BigDecimal.valueOf(9));
     }
 
+    @Test
+    public void getPersonByLogin_ShouldReturnPerson_OrThrowException () {
+        String existingLogin = "egusator";
+        String nonexistentLogin = "egusato";
+        given(personRepository.personWithThisLoginExists(nonexistentLogin)).willReturn(false);
+        given(personRepository.personWithThisLoginExists(existingLogin)).willReturn(true);
+
+        assertThrows(UserNotFoundException.class, () -> {
+            personService.getPersonByLogin(nonexistentLogin);
+        });
+
+        assertDoesNotThrow(() -> {
+            personService.getPersonByLogin(existingLogin);
+        });
+    }
 }

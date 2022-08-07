@@ -18,4 +18,6 @@ public interface PersonRepository {
 
     public boolean personExists (long id);
     public boolean loginIsUsed (String login);
+    public boolean personWithThisLoginExists(String login);
+    public PersonEntity getPersonByLogin(String login);
 }

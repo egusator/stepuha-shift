@@ -76,4 +76,17 @@ public class PersonRepositoryImpl implements PersonRepository {
             preparedStatement.setString(1, login);
         },rowMapper).size() > 0;
     }
+
+    @Override
+    public boolean personWithThisLoginExists(String login) {
+        final String sql = "select * from person where login = ?";
+        return jdbcTemplate.query(sql, preparedStatement -> preparedStatement.setString(1, login), rowMapper).size() > 0;
+    }
+
+    @Override
+    public PersonEntity getPersonByLogin(String login) {
+        final String sql = "select * from person where login = ?";
+        return jdbcTemplate.query(sql, preparedStatement -> preparedStatement.setString(1, login), rowMapper).get(0);
+    }
+
 }

@@ -6,8 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.stepuha.controller.dto.EmptyDTO;
 import ru.cft.stepuha.controller.dto.ErrorDTO;
+import ru.cft.stepuha.controller.dto.PersonDTO;
 import ru.cft.stepuha.controller.errors.AppError;
 
+import ru.cft.stepuha.repository.model.PersonEntity;
 import ru.cft.stepuha.service.PersonService;
 import org.apache.commons.lang3.StringUtils;
 import ru.cft.stepuha.service.exceptions.*;
@@ -169,6 +171,31 @@ public class PersonController {
         } catch (Exception e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(1000, "Unknown error")),
                     HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("get-by-id")
+    public ResponseEntity<?> getPersonById (@RequestParam Long id) {
+            return new ResponseEntity<>(new PersonDTO("OK", personService.getPersonById(id)), HttpStatus.OK);
+            //TODO add validation
+    }
+    @GetMapping("get-by-login")
+    public ResponseEntity<?> getPersonByLogin (@RequestParam String login) {
+        try {
+            if (!(StringUtils.isNotBlank(login)
+                    && StringUtils.isNotEmpty(login))) {
+                return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(5007,
+                        "Login can't be empty")),
+                        HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new PersonDTO("OK", personService.getPersonByLogin(login)), HttpStatus.OK);
+        } catch (UserNotFoundException e){
+            return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(6001,
+                    "There is no user with this login")),
+                    HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(1000, "Unknown error")),
+                    HttpStatus.OK);
         }
     }
 }

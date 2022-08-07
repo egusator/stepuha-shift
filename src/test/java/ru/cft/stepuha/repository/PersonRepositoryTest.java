@@ -85,6 +85,20 @@ public class PersonRepositoryTest {
         PersonEntity person = personRepository.getPersonById(1);
         Assert.assertEquals(new BigDecimal(500), person.getMoney());
     }
+
+    @Test
+    public void getPersonByLogin_ShouldReturnPersonEntityWithThisLogin () {
+
+        PersonEntity person = personRepository.getPersonByLogin("egusator");
+        Assert.assertEquals(1, person.getId());
+
+    }
+
+    @Test
+    public void personWithThisLoginExists_ShouldReturnTrueIfExists_EitherFalse () {
+        Assert.assertFalse(personRepository.personWithThisLoginExists("egusato"));
+        Assert.assertTrue(personRepository.personWithThisLoginExists("egusator"));
+    }
     @AfterEach
     public void teardown(){
         jdbcTemplate.update("truncate table person RESTART IDENTITY;");

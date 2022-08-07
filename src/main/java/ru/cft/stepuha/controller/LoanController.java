@@ -35,25 +35,25 @@ public class LoanController {
         try {
             if (borrowerId == null) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(2000, "Id can not be null")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             } else if (borrowerId <= 0) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(3000, "Id should be positive")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             } else if (money == null) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(2001, "Money value cannot be null")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             } else if (money.compareTo(BigDecimal.valueOf(0)) <= 0) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(3001, "Money should be positive")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             }
             loanService.createLoanRequest(borrowerId, money);
             return new ResponseEntity<>(new EmptyDTO("OK"), HttpStatus.OK);
         } catch (UserNotFoundException e){
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(4001, "The user with this id is not found")),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(1000, "Unknown error")),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+                    HttpStatus.OK);
         }
     }
 
