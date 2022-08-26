@@ -2,8 +2,10 @@ package ru.cft.stepuha.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.cft.stepuha.repository.LoanAndPersonRepository;
 import ru.cft.stepuha.repository.LoanRepository;
 import ru.cft.stepuha.repository.PersonRepository;
+import ru.cft.stepuha.repository.model.LoanAndPersonEntity;
 import ru.cft.stepuha.repository.model.LoanEntity;
 
 import ru.cft.stepuha.service.LoanService;
@@ -20,10 +22,13 @@ public class LoanServiceImpl implements LoanService {
 
     private final LoanRepository loanRepository;
     private final PersonRepository personRepository;
+    private final LoanAndPersonRepository  loanAndPersonRepository;
     @Autowired
-    public LoanServiceImpl(LoanRepository loanRepository, PersonRepository personRepository) {
+    public LoanServiceImpl(LoanRepository loanRepository, PersonRepository personRepository,
+                           LoanAndPersonRepository loanAndPersonRepository) {
         this.loanRepository = loanRepository;
         this.personRepository = personRepository;
+        this.loanAndPersonRepository = loanAndPersonRepository;
     }
 
     @Override
@@ -36,9 +41,9 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public List<LoanEntity> getLoanRequestsFreeForLending(long lenderId) throws UserNotFoundException {
+    public List<LoanAndPersonEntity> getLoanRequestsFreeForLending(long lenderId) throws UserNotFoundException {
         if (personRepository.personExists(lenderId)) {
-        return loanRepository.getLoansForLendingById(lenderId);
+        return loanAndPersonRepository.getLoansForLendingById(lenderId);
         } else {
             throw new UserNotFoundException();
         }

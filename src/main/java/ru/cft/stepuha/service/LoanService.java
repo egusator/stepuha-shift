@@ -1,5 +1,6 @@
 package ru.cft.stepuha.service;
 
+import ru.cft.stepuha.repository.model.LoanAndPersonEntity;
 import ru.cft.stepuha.repository.model.LoanEntity;
 import ru.cft.stepuha.service.exceptions.LoanNotFoundException;
 import ru.cft.stepuha.service.exceptions.NotEnoughMoneyException;
@@ -14,7 +15,7 @@ public interface LoanService {
     public void createLoanRequest(long borrowerId, BigDecimal moneyAmount) throws UserNotFoundException;
 
 
-    public List<LoanEntity> getLoanRequestsFreeForLending(long lenderId)  throws UserNotFoundException;
+    public List<LoanAndPersonEntity> getLoanRequestsFreeForLending(long lenderId)  throws UserNotFoundException;
 
     public List<LoanEntity> getLoansWhichNeedToBeRefunded(long borrowerId) throws UserNotFoundException;
 

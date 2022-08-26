@@ -22,4 +22,5 @@ public class LoanEntityRowMapper  implements RowMapper<LoanEntity> {
                 );
         return result;
     }
+
 }

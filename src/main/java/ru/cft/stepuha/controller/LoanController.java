@@ -6,8 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.stepuha.controller.dto.EmptyDTO;
 import ru.cft.stepuha.controller.dto.ErrorDTO;
+import ru.cft.stepuha.controller.dto.LoanAndPersonDTO;
 import ru.cft.stepuha.controller.dto.LoanDTO;
 import ru.cft.stepuha.controller.errors.AppError;
+import ru.cft.stepuha.repository.model.LoanAndPersonEntity;
 import ru.cft.stepuha.repository.model.LoanEntity;
 
 import ru.cft.stepuha.service.LoanService;
@@ -28,7 +30,7 @@ public class LoanController {
     public LoanController(LoanService loanService) {
         this.loanService = loanService;
     }
-
+    //TODO (maybe) change some methods to sql queries with joins
     @PostMapping("create")
     public ResponseEntity<?> createLoan(@RequestParam Long borrowerId,
                            @RequestParam BigDecimal money) {
@@ -62,17 +64,17 @@ public class LoanController {
         try {
             if (personId == null) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(2000, "Id can not be null")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             } else if (personId <= 0) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(3000, "Id should be positive")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             }
-            List<LoanEntity> result = loanService.getLoanRequestsFreeForLending(personId);
-            return new ResponseEntity<>(new LoanDTO("OK", result),
+            List<LoanAndPersonEntity> result = loanService.getLoanRequestsFreeForLending(personId);
+            return new ResponseEntity<>(new LoanAndPersonDTO("OK", result),
                     HttpStatus.OK);
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(4001, "The user with this id is not found")),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(1000, "Unknown error")),
                     HttpStatus.INTERNAL_SERVER_ERROR);
@@ -84,20 +86,20 @@ public class LoanController {
         try {
             if (personId == null) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(2000, "Id can not be null")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             } else if (personId <= 0) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(3000, "Id should be positive")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             }
             List<LoanEntity> result = loanService.getLoansWhichNeedToBeRefunded(personId);
             return new ResponseEntity<>(new LoanDTO("OK", result),
                     HttpStatus.OK);
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(4001, "The user with this id is not found")),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(1000, "Unknown error")),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+                    HttpStatus.OK);
         }
     }
     @PostMapping("lend")
@@ -105,10 +107,10 @@ public class LoanController {
         try {
             if (lenderId == null || loanId == null) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(2000, "Id can not be null")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             } else if (lenderId <= 0 || loanId <= 0) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(3000, "Id should be positive")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             }
 
             loanService.lendMoney(lenderId,loanId);
@@ -118,16 +120,16 @@ public class LoanController {
             return new ResponseEntity<>(new ErrorDTO("ERROR",
                     new AppError(1001,
                             "Not enough balance to complete the action")),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.OK);
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(4001, "The user with this id is not found")),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.OK);
         } catch (LoanNotFoundException e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(4002, "The loan with this id is not found")),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(1000, "Unknown error")),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+                    HttpStatus.OK);
         }
     }
 
@@ -136,20 +138,20 @@ public class LoanController {
         try {
             if (lenderId == null) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(2000, "Id can not be null")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             } else if (lenderId <= 0) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(3000, "Id should be positive")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             }
             List<LoanEntity> result = loanService.getPromisedLoans(lenderId);
             return new ResponseEntity<>(new LoanDTO("OK", result),
                     HttpStatus.OK);
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(4001, "The user with this id is not found")),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(1000, "Unknown error")),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+                    HttpStatus.OK);
         }
     }
 
@@ -160,20 +162,20 @@ public class LoanController {
         try {
             if (userId == null) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(2000, "Id can not be null")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             } else if (userId <= 0) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(3000, "Id should be positive")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             }
             List<LoanEntity> result = loanService.getLoanRequestsOfUser(userId);
             return new ResponseEntity<>(new LoanDTO("OK", result),
                     HttpStatus.OK);
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(4001, "The user with this id is not found")),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(1000, "Unknown error")),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+                    HttpStatus.OK);
         }
     }
     @PostMapping("refund")
@@ -181,10 +183,10 @@ public class LoanController {
         try {
             if (loanId == null) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(2000, "Id can not be null")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             } else if (loanId <= 0) {
                 return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(3000, "Id should be positive")),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.OK);
             }
             loanService.refundMoney(loanId);
             return new ResponseEntity<>(new EmptyDTO("OK"), HttpStatus.OK);
@@ -192,13 +194,13 @@ public class LoanController {
             return new ResponseEntity<>(new ErrorDTO("ERROR",
                                                         new AppError(1001,
                                                                 "Not enough balance to complete the action")),
-                                         HttpStatus.BAD_REQUEST);
+                                         HttpStatus.OK);
         } catch (LoanNotFoundException e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(4002, "The loan with this id is not found")),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ErrorDTO("ERROR", new AppError(1000, "Unknown error")),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+                    HttpStatus.OK);
         }
     }
 }

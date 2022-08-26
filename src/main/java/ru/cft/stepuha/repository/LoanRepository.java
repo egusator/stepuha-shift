@@ -8,7 +8,7 @@ import java.util.List;
 public interface LoanRepository {
     public void createLoan (long borrowerId, BigDecimal moneyAmount);
 
-    public List<LoanEntity> getLoansForLendingById(long lenderId);
+
     public List<LoanEntity> getLoansForRefundingById(long borrowerId);
     public void lendMoneyByLoanId(long loanId, long lenderId);
 

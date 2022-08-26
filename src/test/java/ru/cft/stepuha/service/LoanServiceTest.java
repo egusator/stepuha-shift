@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import ru.cft.stepuha.repository.LoanAndPersonRepository;
 import ru.cft.stepuha.repository.LoanRepository;
 import ru.cft.stepuha.repository.PersonRepository;
 import ru.cft.stepuha.repository.model.LoanEntity;
@@ -34,7 +35,8 @@ public class LoanServiceTest {
     private LoanRepository loanRepository;
     @Mock
     private PersonRepository personRepository;
-
+    @Mock
+    private LoanAndPersonRepository loanAndPersonRepository;
     @InjectMocks
     private LoanServiceImpl loanService;
 
@@ -56,19 +58,20 @@ public class LoanServiceTest {
     }
 
     @Test
-    public void getLoanRequestsFreeForLending_ShouldReturnListOfLoansAvalibleForLending() {
+    public void getLoanRequestsFreeForLending_ShouldReturnLoansFreeForLendingAndBorrowers() {
         long existingPersonId = 1;
         long nonexistentPersonId = 2;
-        given(personRepository.personExists(existingPersonId)).willReturn(true);
-        given(personRepository.personExists(nonexistentPersonId)).willReturn(false);
+        given(personRepository.personExists(eq(existingPersonId))).willReturn(true);
+        given(personRepository.personExists(eq(nonexistentPersonId))).willReturn(false);
         assertThrows(UserNotFoundException.class, () -> {
             loanService.getLoanRequestsFreeForLending(nonexistentPersonId);
         });
+
         assertDoesNotThrow(() -> {
             loanService.getLoanRequestsFreeForLending(existingPersonId);
         });
-        verify(loanRepository, times(1)).getLoansForLendingById(anyLong());
-        verify(loanRepository, times(1)).getLoansForLendingById(existingPersonId);
+        verify(loanAndPersonRepository, times(1)).getLoansForLendingById(anyLong());
+        verify(loanAndPersonRepository, times(1)).getLoansForLendingById(existingPersonId);
     }
 
     @Test

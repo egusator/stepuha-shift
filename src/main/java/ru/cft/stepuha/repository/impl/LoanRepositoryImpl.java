@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.cft.stepuha.repository.LoanRepository;
+import ru.cft.stepuha.repository.model.LoanAndPersonEntity;
 import ru.cft.stepuha.repository.model.LoanEntity;
 
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ import java.util.List;
 public class LoanRepositoryImpl implements LoanRepository {
     private final JdbcTemplate jdbcTemplate;
     private final RowMapper<LoanEntity> rowMapper;
+
     @Autowired
     public LoanRepositoryImpl (JdbcTemplate jdbcTemplate, RowMapper<LoanEntity> rowMapper) {
         this.jdbcTemplate = jdbcTemplate;
@@ -37,11 +39,7 @@ public class LoanRepositoryImpl implements LoanRepository {
         return jdbcTemplate.query(sql, preparedStatement -> preparedStatement.setLong(1, loanId), rowMapper).size() > 0;
     }
 
-    @Override
-    public List<LoanEntity> getLoansForLendingById(long lenderId) {
-        final String sql = "select * from loan where borrower_id != ? and state = 1;";
-        return jdbcTemplate.query(sql, preparedStatement -> preparedStatement.setLong(1, lenderId), rowMapper);
-    }
+
 
 
     @Override
